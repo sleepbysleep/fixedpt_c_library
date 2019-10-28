@@ -17,21 +17,8 @@
 #ifndef __FIXED32_H__
 #define __FIXED32_H__
 
-#include <stdint.h>
-
-#include <floatpt/realtype.h>
-
-//#define INLINE
-
-#ifndef INLINE
-# ifdef _MSC_VER
-#  define INLINE __forceinline
-# elif __GNUC__ && !__GNUC_STDC_INLINE__
-#  define INLINE extern inline
-# else
-#  define INLINE inline
-# endif
-#endif
+#include <inttypes.h>
+#include <math.h>
 
 /* Q is a fixed point number format
  * where the number of fractional bits (and optionally the number of integer bits) is specified.
@@ -78,6 +65,7 @@ typedef enum {
   Q0_31, // SFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF <= -1 < float < 1
   Q32_OUT_OF_RESOLUTION
 } fixed32_qformat_t;
+typedef int32_t fixed32_t;
 
 #define Q30_1_MIN ((double)INT32_MIN / (1UL<<1))
 #define Q30_1_MAX ((double)INT32_MAX / (1UL<<1))
@@ -146,46 +134,44 @@ typedef enum {
 extern "C" {
 #endif
 
-  int32_t fixed32_convert(int32_t fix32, fixed32_qformat_t q1, fixed32_qformat_t q2);
-  INLINE int32_t uint8_to_fixed32(uint8_t v, fixed32_qformat_t q);
-  INLINE int32_t int8_to_fixed32(int8_t v, fixed32_qformat_t q);
-  INLINE int32_t uint16_to_fixed32(uint16_t v, fixed32_qformat_t q);
-  INLINE int32_t int16_to_fixed32(int16_t v, fixed32_qformat_t q);
-  INLINE int32_t uint32_to_fixed32(uint32_t v, fixed32_qformat_t q);
-  INLINE int32_t int32_to_fixed32(int32_t v, fixed32_qformat_t q);
-  INLINE int32_t float_to_fixed32(float v, fixed32_qformat_t q);
-  INLINE int32_t double_to_fixed32(double v, fixed32_qformat_t q);
-
-  INLINE uint8_t fixed32_to_uint8(int32_t fix32, fixed32_qformat_t q);
-  INLINE int8_t fixed32_to_int8(int32_t fix32, fixed32_qformat_t q);
-  INLINE uint16_t fixed32_to_uint16(int32_t fix32, fixed32_qformat_t q);
-  INLINE int16_t fixed32_to_int16(int32_t fix32, fixed32_qformat_t q);
-  INLINE uint32_t fixed32_to_uint32(int32_t fix32, fixed32_qformat_t q);
-  INLINE int32_t fixed32_to_int32(int32_t fix32, fixed32_qformat_t q);
-  INLINE float fixed32_to_float(int32_t fix32, fixed32_qformat_t q);
-  INLINE double fixed32_to_double(int32_t fix32, fixed32_qformat_t q);
-
-  fixed32_qformat_t fixed32_get_qformat_specifying_range(double fmin, double fmax);
-  fixed32_qformat_t fixed32_get_qformat_specifying_resolution(double epsilon);
-  void fixed32_generate_float_resolution(void);
-  void fixed32_generate_double_resolution(void);
-  void fixed32_generate_float_mapping(void);
-  void fixed32_generate_double_mapping(void);
-
-#ifdef USE_FLOAT_AS_REAL
-# define real_to_fixed32 float_to_fixed32
-# define fixed32_to_real fixed32_to_float
-#else // USE_DOUBLE_AS_REAL
-# define real_to_fixed32 double_to_fixed32
-# define fixed32_to_real fixed32_to_double
-#endif
-
-  INLINE int32_t fixed32_add(int32_t a, int32_t b);
-  int32_t fixed32_add_with_trim(int32_t a, int32_t b);
-  INLINE int32_t fixed32_subtract(int32_t a, int32_t b);
-  int32_t fixed32_subtract_with_trim(int32_t a, int32_t b);
-  int32_t fixed32_multiply(int32_t a, int32_t b, fixed32_qformat_t q);
-  int32_t fixed32_divide(int32_t a, int32_t b, fixed32_qformat_t q);
+  // Return the Q format with the range larger than given range
+  fixed32_qformat_t fixed32_get_qformat_covering_range(double fmin, double fmax);
+  // Return the Q format with the unit resolution finer than given epsilon
+  fixed32_qformat_t fixed32_get_qformat_covering_resolution(double epsilon);
+  // Generate the unit resolutions of Q32 format in float-typed container
+  void fixed32_generate_resolutions_in_float(void);
+  // Generate the covering ranges of Q32 format in float-typed container
+  void fixed32_generate_ranges_in_float(void);
+  // Generate the unit resolutions of Q32 format in double-typed container
+  void fixed32_generate_resolutions_in_double(void);
+  // Generate the covering ranges of Q32 format in double-typed container
+  void fixed32_generate_ranges_in_double(void);
+  // Conversion between 32bit Q formats
+  fixed32_t fixed32_convert(fixed32_t fix32, fixed32_qformat_t q1, fixed32_qformat_t q2);
+  // Conversion between 32bit Q format, and standard c-type
+  static inline fixed32_t uint8_to_fixed32(uint8_t v, fixed32_qformat_t q) { return (fixed32_t)v << q; }
+  static inline fixed32_t int8_to_fixed32(int8_t v, fixed32_qformat_t q) { return (fixed32_t)v << q; }
+  static inline fixed32_t uint16_to_fixed32(uint16_t v, fixed32_qformat_t q) { return (fixed32_t)v << q; }
+  static inline fixed32_t int16_to_fixed32(int16_t v, fixed32_qformat_t q) { return (fixed32_t)v << q; }
+  static inline fixed32_t uint32_to_fixed32(uint32_t v, fixed32_qformat_t q) { return (fixed32_t)v << q; }
+  static inline fixed32_t int32_to_fixed32(int32_t v, fixed32_qformat_t q) { return (fixed32_t)v << q; }
+  static inline fixed32_t float_to_fixed32(float v, fixed32_qformat_t q) { return (fixed32_t)(v * (1UL << q)); }
+  static inline fixed32_t double_to_fixed32(double v, fixed32_qformat_t q) { return (fixed32_t)(v * (1UL << q)); }
+  static inline uint8_t fixed32_to_uint8(fixed32_t fix32, fixed32_qformat_t q) { return (uint8_t)(fix32 >> q); }
+  static inline int8_t fixed32_to_int8(fixed32_t fix32, fixed32_qformat_t q) { return (int8_t)(fix32 >> q); }
+  static inline uint16_t fixed32_to_uint16(fixed32_t fix32, fixed32_qformat_t q) { return (uint16_t)(fix32 >> q); }
+  static inline int16_t fixed32_to_int16(fixed32_t fix32, fixed32_qformat_t q) { return (int16_t)(fix32 >> q); }
+  static inline uint32_t fixed32_to_uint32(fixed32_t fix32, fixed32_qformat_t q) { return (uint32_t)(fix32 >> q); }
+  static inline int32_t fixed32_to_int32(fixed32_t fix32, fixed32_qformat_t q) { return (int32_t)(fix32 >> q); }
+  static inline float fixed32_to_float(fixed32_t fix32, fixed32_qformat_t q) { return (float)fix32 / (1UL << q); }
+  static inline double fixed32_to_double(fixed32_t fix32, fixed32_qformat_t q) { return (double)fix32 / (1UL << q); }
+  // Arithmetic operations of 32bit Q Format
+  static inline fixed32_t fixed32_add(fixed32_t a, fixed32_t b) { fixed32_t c; c = a + b; return c; }
+  fixed32_t fixed32_add_with_trim(fixed32_t a, fixed32_t b);
+  static inline fixed32_t fixed32_subtract(fixed32_t a, fixed32_t b) { fixed32_t c; c = a - b; return c; }
+  fixed32_t fixed32_subtract_with_trim(fixed32_t a, fixed32_t b);
+  fixed32_t fixed32_multiply(fixed32_t a, fixed32_t b, fixed32_qformat_t q);
+  fixed32_t fixed32_divide(fixed32_t a, fixed32_t b, fixed32_qformat_t q);
 
 #ifdef __cplusplus
 }

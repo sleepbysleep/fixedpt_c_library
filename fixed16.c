@@ -20,118 +20,28 @@
 #include <stdlib.h>
 #include <inttypes.h>
 
-//#define INLINE
-#include <fixedpt/fixed16.h>
-#include <common.h>
+#include "fixed16.h"
 
-/*
- Q is a fixed point number format
- where the number of fractional bits
- (and optionally the number of integer bits) is specified.
- For example, a Q15 number has 15 fractional bits;
- a Q1.14 number has 1 integer bit and 14 fractional bits.
- and in applications that require constant resolution.
-  - from wikipedia.com
- Inspired by Atmel Software Framework, and
- en.wikipedia.org/wiki/Q_(number_format)
-*/
-int16_t fixed16_convert(int16_t fix16, fixed16_qformat_t q1, fixed16_qformat_t q2)
+fixed16_t fixed16_convert(fixed16_t fix16, fixed16_qformat_t q1, fixed16_qformat_t q2)
 {
   int dist;
 
   dist = q2 - q1;
   if (dist > 0) fix16 <<= dist;
-  else if (dist < 0) fix16 >>= ABS(dist);
-
+  else if (dist < 0) fix16 >>= abs(dist);
+  /*
+  float temp = fixed16_to_float(fix16, q1);
+  fixed16_t fix16 = float_to_fixed16(temp, q2);
+  */
   return fix16;
 }
 
-INLINE int16_t uint8_to_fixed16(uint8_t v, fixed16_qformat_t q)
-{
-  return (int16_t)v << q;
-}
-
-INLINE int16_t int8_to_fixed16(int8_t v, fixed16_qformat_t q)
-{
-  return (int16_t)v << q;
-}
-
-INLINE int16_t uint16_to_fixed16(uint16_t v, fixed16_qformat_t q)
-{
-  return (int16_t)v << q;
-}
-
-INLINE int16_t int16_to_fixed16(int16_t v, fixed16_qformat_t q)
-{
-  return (int16_t)v << q;
-}
-
-INLINE int16_t uint32_to_fixed16(uint32_t v, fixed16_qformat_t q)
-{
-  return (int16_t)v << q;
-}
-
-INLINE int16_t int32_to_fixed16(int32_t v, fixed16_qformat_t q)
-{
-  return (int16_t)v << q;
-}
-
-INLINE int16_t float_to_fixed16(float v, fixed16_qformat_t q)
-{
-  return (int16_t)(v * (1UL << q));
-}
-
-INLINE int16_t double_to_fixed16(double v, fixed16_qformat_t q)
-{
-  return (int16_t)(v * (1UL << q));
-}
-
-INLINE uint8_t fixed16_to_uint8(int16_t fix16, fixed16_qformat_t q)
-{
-  return (uint8_t)(fix16 >> q);
-}
-
-INLINE int8_t fixed16_to_int8(int16_t fix16, fixed16_qformat_t q)
-{
-  return (int8_t)(fix16 >> q);
-}
-
-INLINE uint16_t fixed16_to_uint16(int16_t fix16, fixed16_qformat_t q)
-{
-  return (uint16_t)(fix16 >> q);
-}
-
-INLINE int16_t fixed16_to_int16(int16_t fix16, fixed16_qformat_t q)
-{
-  return (int16_t)(fix16 >> q);
-}
-
-INLINE uint32_t fixed16_to_uint32(int16_t fix16, fixed16_qformat_t q)
-{
-  return (uint32_t)(fix16 >> q);
-}
-
-INLINE int32_t fixed16_to_int32(int16_t fix16, fixed16_qformat_t q)
-{
-  return (int32_t)(fix16 >> q);
-}
-
-INLINE float fixed16_to_float(int16_t fix16, fixed16_qformat_t q)
-{
-  return (float)fix16 / (1UL << q);
-}
-
-INLINE double fixed16_to_double(int16_t fix16, fixed16_qformat_t q)
-{
-  return (double)fix16 / (1UL << q);
-}
-
-fixed16_qformat_t fixed16_get_qformat_specifying_range(double fmin, double fmax)
+fixed16_qformat_t fixed16_get_qformat_covering_range(double fmin, double fmax)
 {
   fixed16_qformat_t q;
   int16_t fixmin = INT16_MIN, fixmax = INT16_MAX;
 
-  for (q = Q0_15; q >= Q14_1; q--) {
+  for (q = Q0_15; q >= Q14_1; --q) {
     if ((fmin >= fixed16_to_double(fixmin, q)) &&
 	(fmax <= fixed16_to_double(fixmax, q)))
       return q;
@@ -142,13 +52,13 @@ fixed16_qformat_t fixed16_get_qformat_specifying_range(double fmin, double fmax)
   return q; // Q16_OUT_OF_RANGE
 }
 
-fixed16_qformat_t fixed16_get_qformat_specifying_resolution(double epsilon)
+fixed16_qformat_t fixed16_get_qformat_covering_resolution(double epsilon)
 {
-  int16_t value;
+  fixed16_t value;
   fixed16_qformat_t q;
 
   value = 1;
-  for (q = Q14_1; q <= Q0_15; q++) {
+  for (q = Q14_1; q <= Q0_15; ++q) {
     if (epsilon >= fixed16_to_double(value, q))
       return q;
   }
@@ -158,63 +68,55 @@ fixed16_qformat_t fixed16_get_qformat_specifying_resolution(double epsilon)
   return q; // Q16_OUT_OF_RANGE
 }
 
-void fixed16_generate_float_resolution(void)
+void fixed16_generate_resolutions_in_float(void)
 {
-  int16_t value;
   fixed16_qformat_t q;
 
-  value = 1;
-  for (q = Q14_1; q <= Q0_15; q++) {
-    printf("Q%d.%d: %d -> %.18e\n", 15-q, q, value, fixed16_to_double(value, q));
+  printf("Q format of 16bit - Unit resolution in float-typed container\n");
+  for (q = Q14_1; q <= Q0_15; ++q) {
+    printf("\tQ%d.%d:\t%.18e\n", 15-q, q, fixed16_to_float((fixed16_t)1, q));
   }
 }
 
-void fixed16_generate_double_resolution(void)
+void fixed16_generate_resolutions_in_double(void)
 {
-  int16_t value;
   fixed16_qformat_t q;
 
-  value = 1;
-  for (q = Q14_1; q <= Q0_15; q++) {
-    printf("Q%d.%d: %d -> %.18e\n", 15-q, q, value, fixed16_to_double(value, q));
+  printf("Q format of 16bit - Unit resolution in double-typed container\n");
+  for (q = Q14_1; q <= Q0_15; ++q) {
+    printf("\tQ%d.%d:\t%.18e\n", 15-q, q, fixed16_to_double((fixed16_t)1, q));
   }
 }
 
-void fixed16_generate_float_mapping(void)
+void fixed16_generate_ranges_in_float(void)
 {
-  int16_t vmin, vmax;
+  fixed16_t vmin, vmax;
   fixed16_qformat_t q;
 
+  printf("Q format of 16bit - Covering range in float-typed container\n");
+  vmin = INT16_MIN;
+  vmax = INT16_MAX;
+  for (q = Q14_1; q <= Q0_15; ++q) {
+    printf("\tQ%d.%d:\t[%.18e, %.18e]\n", 15-q, q, fixed16_to_float(vmin, q), fixed16_to_float(vmax, q));
+  }
+}
+
+void fixed16_generate_ranges_in_double(void)
+{
+  fixed16_t vmin, vmax;
+  fixed16_qformat_t q;
+
+  printf("Q format of 16bit - Covering range in double-typed container\n");
   vmin = INT16_MIN;
   vmax = INT16_MAX;
   for (q = Q14_1; q <= Q0_15; q++) {
-    printf("Q%d.%d: %d, %d -> %.18e, %.18e\n", 15-q, q, vmin, vmax, fixed16_to_float(vmin, q), fixed16_to_float(vmax, q));
+    printf("\tQ%d.%d:\t[%.18e, %.18e]\n", 15-q, q, fixed16_to_double(vmin, q), fixed16_to_double(vmax, q));
   }
 }
 
-void fixed16_generate_double_mapping(void)
+fixed16_t fixed16_add_with_trim(fixed16_t a, fixed16_t b)
 {
-  int16_t vmin, vmax;
-  fixed16_qformat_t q;
-
-  vmin = INT16_MIN;
-  vmax = INT16_MAX;
-  for (q = Q14_1; q <= Q0_15; q++) {
-    printf("Q%d.%d: %d, %d -> %.18e, %.18e\n", 15-q, q, vmin, vmax, fixed16_to_double(vmin, q), fixed16_to_double(vmax, q));
-  }
-}
-
-INLINE int16_t fixed16_add(int16_t a, int16_t b)
-{
-  int16_t c;
-
-  c = a + b;
-  return c;
-}
-
-int16_t fixed16_add_with_trim(int16_t a, int16_t b)
-{
-  int16_t c;
+  fixed16_t c;
   int32_t tmp;
 
   tmp = (int32_t)a + (int32_t)b;
@@ -226,21 +128,13 @@ int16_t fixed16_add_with_trim(int16_t a, int16_t b)
     tmp = INT16_MIN;
   }
 
-  c = (int16_t)tmp;
+  c = (fixed16_t)tmp;
   return c;
 }
 
-INLINE int16_t fixed16_subtract(int16_t a, int16_t b)
+fixed16_t fixed16_subtract_with_trim(fixed16_t a, fixed16_t b)
 {
-  int16_t c;
-
-  c = a - b;
-  return c;
-}
-
-int16_t fixed16_subtract_with_trim(int16_t a, int16_t b)
-{
-  int16_t c;
+  fixed16_t c;
   int32_t tmp;
 
   tmp = (int32_t)a - (int32_t)b;
@@ -252,13 +146,13 @@ int16_t fixed16_subtract_with_trim(int16_t a, int16_t b)
     tmp = INT16_MIN;
   }
 
-  c = (int16_t)tmp;
+  c = (fixed16_t)tmp;
   return c;
 }
 
-int16_t fixed16_multiply(int16_t a, int16_t b, fixed16_qformat_t q)
+fixed16_t fixed16_multiply(fixed16_t a, fixed16_t b, fixed16_qformat_t q)
 {
-  int16_t c;
+  fixed16_t c;
   int32_t tmp;
 
   tmp = (int32_t)a * (int32_t)b;
@@ -273,13 +167,13 @@ int16_t fixed16_multiply(int16_t a, int16_t b, fixed16_qformat_t q)
     tmp = INT16_MIN;
   }
 
-  c = (int16_t)tmp;
+  c = (fixed16_t)tmp;
   return c;
 }
 	
-int16_t fixed16_divide(int16_t a, int16_t b, fixed16_qformat_t q)
+fixed16_t fixed16_divide(fixed16_t a, fixed16_t b, fixed16_qformat_t q)
 {
-  int16_t c;
+  fixed16_t c;
   int32_t tmp;
 
   // pre-multiply by the base  (Upscale to Q16 so that the result will be in Q8 format)
@@ -290,7 +184,7 @@ int16_t fixed16_divide(int16_t a, int16_t b, fixed16_qformat_t q)
   else
     tmp -= b >> 1;
 
-  c = (int16_t)(tmp/b);
+  c = (fixed16_t)(tmp/b);
 
   return c;
 }

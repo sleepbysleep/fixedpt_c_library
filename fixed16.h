@@ -17,11 +17,8 @@
 #ifndef __FIXED16_H__
 #define __FIXED16_H__
 
-//#include <stdint.h>
 #include <inttypes.h>
-
-#include <common.h>
-#include <floatpt/realtype.h>
+#include <math.h>
 
 /* 
   Q is a fixed point number format
@@ -54,6 +51,8 @@ typedef enum {
   Q0_15,// SFFFFFFFFFFFFFFF <-     -1 < float < 1
   Q16_OUT_OF_RESOLUTION
 } fixed16_qformat_t;
+
+typedef int16_t fixed16_t;
 
 #define Q14_1_MIN ((double)INT16_MIN / (1UL<<1))
 #define Q14_1_MAX ((double)INT16_MAX / (1UL<<1))
@@ -90,46 +89,44 @@ typedef enum {
 extern "C" {
 #endif
 
-  int16_t fixed16_convert(int16_t fix16, fixed16_qformat_t q1, fixed16_qformat_t q2);
-  INLINE int16_t uint8_to_fixed16(uint8_t v, fixed16_qformat_t q);
-  INLINE int16_t int8_to_fixed16(int8_t v, fixed16_qformat_t q);
-  INLINE int16_t uint16_to_fixed16(uint16_t v, fixed16_qformat_t q);
-  INLINE int16_t int16_to_fixed16(int16_t v, fixed16_qformat_t q);
-  INLINE int16_t uint32_to_fixed16(uint32_t v, fixed16_qformat_t q);
-  INLINE int16_t int32_to_fixed16(int32_t v, fixed16_qformat_t q);
-  INLINE int16_t float_to_fixed16(float v, fixed16_qformat_t q);
-  INLINE int16_t double_to_fixed16(double v, fixed16_qformat_t q);
-
-  INLINE uint8_t fixed16_to_uint8(int16_t fix16, fixed16_qformat_t q);
-  INLINE int8_t fixed16_to_int8(int16_t fix16, fixed16_qformat_t q);
-  INLINE uint16_t fixed16_to_uint16(int16_t fix16, fixed16_qformat_t q);
-  INLINE int16_t fixed16_to_int16(int16_t fix16, fixed16_qformat_t q);
-  INLINE uint32_t fixed16_to_uint32(int16_t fix16, fixed16_qformat_t q);
-  INLINE int32_t fixed16_to_int32(int16_t fix16, fixed16_qformat_t q);
-  INLINE float fixed16_to_float(int16_t fix16, fixed16_qformat_t q);
-  INLINE double fixed16_to_double(int16_t fix16, fixed16_qformat_t q);
-
-  fixed16_qformat_t fixed16_get_qformat_specifying_range(double fmin, double fmax);
-  fixed16_qformat_t fixed16_get_qformat_specifying_resolution(double epsilon);
-  void fixed16_generate_float_resolution(void);
-  void fixed16_generate_double_resolution(void);
-  void fixed16_generate_float_mapping(void);
-  void fixed16_generate_double_mapping(void);
-  
-#ifdef USE_FLOAT_AS_REAL
-# define real_to_fixed16 float_to_fixed16
-# define fixed16_to_real fixed16_to_float
-#else // USE_DOUBLE_AS_REAL
-# define real_to_fixed16 double_to_fixed16
-# define fixed16_to_real fixed16_to_double
-#endif
-
-  INLINE int16_t fixed16_add(int16_t a, int16_t b);
-  int16_t fixed16_add_with_trim(int16_t a, int16_t b);
-  INLINE int16_t fixed16_subtract(int16_t a, int16_t b);
-  int16_t fixed16_subtract_with_trim(int16_t a, int16_t b);
-  int16_t fixed16_multiply(int16_t a, int16_t b, fixed16_qformat_t q);
-  int16_t fixed16_divide(int16_t a, int16_t b, fixed16_qformat_t q);
+  // Return the Q format with the range larger than given range
+  fixed16_qformat_t fixed16_get_qformat_covering_range(double fmin, double fmax);
+  // Return the Q format with the unit resolution finer than given epsilon
+  fixed16_qformat_t fixed16_get_qformat_covering_resolution(double epsilon);
+  // Generate the unit resolutions of Q16 format in float-typed container
+  void fixed16_generate_resolutions_in_float(void);
+  // Generate the covering ranges of Q16 format in float-typed container
+  void fixed16_generate_ranges_in_float(void);
+  // Generate the unit resolutions of Q16 format in double-typed container
+  void fixed16_generate_resolutions_in_double(void);
+  // Generate the covering ranges of Q16 format in double-typed container
+  void fixed16_generate_ranges_in_double(void);
+  // Conversion between 16bit Q formats
+  fixed16_t fixed16_convert(fixed16_t fix16, fixed16_qformat_t q1, fixed16_qformat_t q2);
+  // Conversion between 16bit Q format, and standard c-type
+  static inline fixed16_t uint8_to_fixed16(uint8_t v, fixed16_qformat_t q) { return (fixed16_t)v << q; }
+  static inline fixed16_t int8_to_fixed16(int8_t v, fixed16_qformat_t q) { return (fixed16_t)v << q; }
+  static inline fixed16_t uint16_to_fixed16(uint16_t v, fixed16_qformat_t q) { return (fixed16_t)v << q; }
+  static inline fixed16_t int16_to_fixed16(int16_t v, fixed16_qformat_t q) { return (fixed16_t)v << q; }
+  static inline fixed16_t uint32_to_fixed16(uint32_t v, fixed16_qformat_t q) { return (fixed16_t)v << q; }
+  static inline fixed16_t int32_to_fixed16(int32_t v, fixed16_qformat_t q) { return (fixed16_t)v << q; }
+  static inline fixed16_t float_to_fixed16(float v, fixed16_qformat_t q) { return (fixed16_t)(v * (1UL << q)); }
+  static inline fixed16_t double_to_fixed16(double v, fixed16_qformat_t q) { return (fixed16_t)(v * (1UL << q)); }
+  static inline uint8_t fixed16_to_uint8(fixed16_t fix16, fixed16_qformat_t q) { return (uint8_t)(fix16 >> q); }
+  static inline int8_t fixed16_to_int8(fixed16_t fix16, fixed16_qformat_t q) { return (int8_t)(fix16 >> q); }
+  static inline uint16_t fixed16_to_uint16(fixed16_t fix16, fixed16_qformat_t q) { return (uint16_t)(fix16 >> q); }
+  static inline int16_t fixed16_to_int16(fixed16_t fix16, fixed16_qformat_t q) { return (int16_t)(fix16 >> q); }
+  static inline uint32_t fixed16_to_uint32(fixed16_t fix16, fixed16_qformat_t q) { return (uint32_t)(fix16 >> q); }
+  static inline int32_t fixed16_to_int32(fixed16_t fix16, fixed16_qformat_t q) { return (int32_t)(fix16 >> q); }
+  static inline float fixed16_to_float(fixed16_t fix16, fixed16_qformat_t q) { return (float)fix16 / (1UL << q); }
+  static inline double fixed16_to_double(fixed16_t fix16, fixed16_qformat_t q) { return (double)fix16 / (1UL << q); }
+  // Arithmetic operations of 16bit Q Format
+  static inline fixed16_t fixed16_add(fixed16_t a, fixed16_t b) { fixed16_t c; c = a + b; return c; }
+  fixed16_t fixed16_add_with_trim(fixed16_t a, fixed16_t b);
+  static inline fixed16_t fixed16_subtract(fixed16_t a, fixed16_t b) { fixed16_t c; c = a - b; return c; }
+  fixed16_t fixed16_subtract_with_trim(fixed16_t a, fixed16_t b);
+  fixed16_t fixed16_multiply(fixed16_t a, fixed16_t b, fixed16_qformat_t q);
+  fixed16_t fixed16_divide(fixed16_t a, fixed16_t b, fixed16_qformat_t q);
 
 #ifdef __cplusplus
 }
