@@ -8,26 +8,25 @@ and in applications that require constant resolution.
  - from wikipedia.com
 
 # 16bit format
-Q14.1 - "SIIIIIIIIIIIIIIF" <- -16384 < float < 16384
-Q13.2 - "SIIIIIIIIIIIIIFF" <-  -8192 < float < 8192
-Q12.3 - "SIIIIIIIIIIIIFFF" <-  -4096 < float < 4096
-Q11.4 - "SIIIIIIIIIIIFFFF" <-  -2048 < float < 2048
-Q10.5 - "SIIIIIIIIIIFFFFF" <-  -1024 < float < 1024
-Q9.6  - "SIIIIIIIIIFFFFFF" <-   -512 < float < 512
-Q8.7  - "SIIIIIIIIFFFFFFF" <-   -256 < float < 256
-Q7.8  - "SIIIIIIIFFFFFFFF" <-   -128 < float < 128
-Q6.9  - "SIIIIIIFFFFFFFFF" <-    -64 < float < 64
-Q5.10 - "SIIIIIFFFFFFFFFF" <-    -32 < float < 32
-Q4.11 - "SIIIIFFFFFFFFFFF" <-    -16 < float < 16
-Q3.12 - "SIIIFFFFFFFFFFFF" <-     -8 < float < 8
-Q2.13 - "SIIFFFFFFFFFFFFF" <-     -4 < float < 4
-Q1.14 - "SIFFFFFFFFFFFFFF" <-     -2 < float < 2
-Q0.15 - "SFFFFFFFFFFFFFFF" <-     -1 < float < 1
-where S is sign bit, I is integer bit, and F is fractional bit.
-
-  In float-typed conatiner,
-  Their unit resolution are;
-	Q14.1:	5.000000000000000000e-01
+<pre><code>	Q14.1 - "SIIIIIIIIIIIIIIF" <- -16384 < float < 16384
+	Q13.2 - "SIIIIIIIIIIIIIFF" <-  -8192 < float < 8192
+	Q12.3 - "SIIIIIIIIIIIIFFF" <-  -4096 < float < 4096
+	Q11.4 - "SIIIIIIIIIIIFFFF" <-  -2048 < float < 2048
+	Q10.5 - "SIIIIIIIIIIFFFFF" <-  -1024 < float < 1024
+	Q9.6  - "SIIIIIIIIIFFFFFF" <-   -512 < float < 512
+	Q8.7  - "SIIIIIIIIFFFFFFF" <-   -256 < float < 256
+	Q7.8  - "SIIIIIIIFFFFFFFF" <-   -128 < float < 128
+	Q6.9  - "SIIIIIIFFFFFFFFF" <-    -64 < float < 64
+	Q5.10 - "SIIIIIFFFFFFFFFF" <-    -32 < float < 32
+	Q4.11 - "SIIIIFFFFFFFFFFF" <-    -16 < float < 16
+	Q3.12 - "SIIIFFFFFFFFFFFF" <-     -8 < float < 8 
+	Q2.13 - "SIIFFFFFFFFFFFFF" <-     -4 < float < 4 
+	Q1.14 - "SIFFFFFFFFFFFFFF" <-     -2 < float < 2 
+	Q0.15 - "SFFFFFFFFFFFFFFF" <-     -1 < float < 1 </code></pre>
+where S is sign bit, I is integer bit, and F is fractional bit. <br/>
+In float-typed conatiner, <br/>
+Their unit resolution are; <br/>
+<pre><code>	Q14.1:	5.000000000000000000e-01
 	Q13.2:	2.500000000000000000e-01
 	Q12.3:	1.250000000000000000e-01
 	Q11.4:	6.250000000000000000e-02
@@ -41,9 +40,9 @@ where S is sign bit, I is integer bit, and F is fractional bit.
 	Q3.12:	2.441406250000000000e-04
 	Q2.13:	1.220703125000000000e-04
 	Q1.14:	6.103515625000000000e-05
-	Q0.15:	3.051757812500000000e-05
-  And the exact covering ranges are;
-	Q14.1:	[-1.638400000000000000e+04, 1.638350000000000000e+04]
+	Q0.15:	3.051757812500000000e-05</code></pre>
+And the exact covering ranges are; <br/>
+<pre><code>	Q14.1:	[-1.638400000000000000e+04, 1.638350000000000000e+04]
 	Q13.2:	[-8.192000000000000000e+03, 8.191750000000000000e+03]
 	Q12.3:	[-4.096000000000000000e+03, 4.095875000000000000e+03]
 	Q11.4:	[-2.048000000000000000e+03, 2.047937500000000000e+03]
@@ -57,11 +56,10 @@ where S is sign bit, I is integer bit, and F is fractional bit.
 	Q3.12:	[-8.000000000000000000e+00, 7.999755859375000000e+00]
 	Q2.13:	[-4.000000000000000000e+00, 3.999877929687500000e+00]
 	Q1.14:	[-2.000000000000000000e+00, 1.999938964843750000e+00]
-	Q0.15:	[-1.000000000000000000e+00, 9.999694824218750000e-01]
-
-  In double-typed conatiner,
-  Their unit resolution are;
-	Q14.1:	5.000000000000000000e-01
+	Q0.15:	[-1.000000000000000000e+00, 9.999694824218750000e-01]</code></pre>
+In double-typed conatiner,<br/>
+Their unit resolution are; <br/>
+<pre><code>	Q14.1:	5.000000000000000000e-01
 	Q13.2:	2.500000000000000000e-01
 	Q12.3:	1.250000000000000000e-01
 	Q11.4:	6.250000000000000000e-02
@@ -75,9 +73,9 @@ where S is sign bit, I is integer bit, and F is fractional bit.
 	Q3.12:	2.441406250000000000e-04
 	Q2.13:	1.220703125000000000e-04
 	Q1.14:	6.103515625000000000e-05
-	Q0.15:	3.051757812500000000e-05
-  And the exact covering ranges are;
-	Q14.1:	[-1.638400000000000000e+04, 1.638350000000000000e+04]
+	Q0.15:	3.051757812500000000e-05</code></pre>
+  And the exact covering ranges are;<br/>
+<code><pre>	Q14.1:	[-1.638400000000000000e+04, 1.638350000000000000e+04]
 	Q13.2:	[-8.192000000000000000e+03, 8.191750000000000000e+03]
 	Q12.3:	[-4.096000000000000000e+03, 4.095875000000000000e+03]
 	Q11.4:	[-2.048000000000000000e+03, 2.047937500000000000e+03]
@@ -91,10 +89,10 @@ where S is sign bit, I is integer bit, and F is fractional bit.
 	Q3.12:	[-8.000000000000000000e+00, 7.999755859375000000e+00]
 	Q2.13:	[-4.000000000000000000e+00, 3.999877929687500000e+00]
 	Q1.14:	[-2.000000000000000000e+00, 1.999938964843750000e+00]
-	Q0.15:	[-1.000000000000000000e+00, 9.999694824218750000e-01]
+	Q0.15:	[-1.000000000000000000e+00, 9.999694824218750000e-01]</code></pre>
 
 # 32bit format
-  Q30_1  - SIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIF <- -1073741824 < float < 1073741824
+<pre><code>  Q30_1  - SIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIF <- -1073741824 < float < 1073741824
   Q29_2  - SIIIIIIIIIIIIIIIIIIIIIIIIIIIIIFF <- -536870912 < float < 536870912
   Q28_3  - SIIIIIIIIIIIIIIIIIIIIIIIIIIIIFFF <- -268435456 < float < 268435456
   Q27_4  - SIIIIIIIIIIIIIIIIIIIIIIIIIIIFFFF <- -134217728 < float < 134217728
@@ -124,12 +122,11 @@ where S is sign bit, I is integer bit, and F is fractional bit.
   Q3_28  - SIIIFFFFFFFFFFFFFFFFFFFFFFFFFFFF <= -8 < float < 8
   Q2_29  - SIIFFFFFFFFFFFFFFFFFFFFFFFFFFFFF <= -4 < float < 4
   Q1_30  - SIFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF <= -2 < float < 2
-  Q0_31  - SFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF <= -1 < float < 1
-  , where S is sign bit, I is integer bit, and F is fractional bit.
-
-  In float-typed conatiner,
-  Their unit resolution are;
-	Q30.1:	5.000000000000000000e-01
+  Q0_31  - SFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF <= -1 < float < 1</code></pre>
+, where S is sign bit, I is integer bit, and F is fractional bit.<br/>
+In float-typed conatiner,<br/>
+Their unit resolution are;<br/>
+<pre><code>	Q30.1:	5.000000000000000000e-01
 	Q29.2:	2.500000000000000000e-01
 	Q28.3:	1.250000000000000000e-01
 	Q27.4:	6.250000000000000000e-02
@@ -159,9 +156,9 @@ where S is sign bit, I is integer bit, and F is fractional bit.
 	Q3.28:	3.725290298461914062e-09
 	Q2.29:	1.862645149230957031e-09
 	Q1.30:	9.313225746154785156e-10
-	Q0.31:	4.656612873077392578e-10
-  And the exact covering ranges are;
-	Q30.1:	[-1.073741824000000000e+09, 1.073741824000000000e+09]
+	Q0.31:	4.656612873077392578e-10</code></pre>
+And the exact covering ranges are;<br/>
+<pre><code>	Q30.1:	[-1.073741824000000000e+09, 1.073741824000000000e+09]
 	Q29.2:	[-5.368709120000000000e+08, 5.368709120000000000e+08]
 	Q28.3:	[-2.684354560000000000e+08, 2.684354560000000000e+08]
 	Q27.4:	[-1.342177280000000000e+08, 1.342177280000000000e+08]
@@ -191,11 +188,10 @@ where S is sign bit, I is integer bit, and F is fractional bit.
 	Q3.28:	[-8.000000000000000000e+00, 8.000000000000000000e+00]
 	Q2.29:	[-4.000000000000000000e+00, 4.000000000000000000e+00]
 	Q1.30:	[-2.000000000000000000e+00, 2.000000000000000000e+00]
-	Q0.31:	[-1.000000000000000000e+00, 1.000000000000000000e+00]
-
-  In double-typed conatiner,
-  Their unit resolution are;
-	Q30.1:	5.000000000000000000e-01
+	Q0.31:	[-1.000000000000000000e+00, 1.000000000000000000e+00]</code></pre>
+In double-typed conatiner,<br/>
+Their unit resolution are;<br/>
+<pre><code>	Q30.1:	5.000000000000000000e-01
 	Q29.2:	2.500000000000000000e-01
 	Q28.3:	1.250000000000000000e-01
 	Q27.4:	6.250000000000000000e-02
@@ -225,9 +221,9 @@ where S is sign bit, I is integer bit, and F is fractional bit.
 	Q3.28:	3.725290298461914062e-09
 	Q2.29:	1.862645149230957031e-09
 	Q1.30:	9.313225746154785156e-10
-	Q0.31:	4.656612873077392578e-10
-  And the exact covering ranges are;
-	Q30.1:	[-1.073741824000000000e+09, 1.073741823500000000e+09]
+	Q0.31:	4.656612873077392578e-10</code></pre>
+And the exact covering ranges are;<br/>
+<pre><code>	Q30.1:	[-1.073741824000000000e+09, 1.073741823500000000e+09]
 	Q29.2:	[-5.368709120000000000e+08, 5.368709117500000000e+08]
 	Q28.3:	[-2.684354560000000000e+08, 2.684354558750000000e+08]
 	Q27.4:	[-1.342177280000000000e+08, 1.342177279375000000e+08]
@@ -257,10 +253,10 @@ where S is sign bit, I is integer bit, and F is fractional bit.
 	Q3.28:	[-8.000000000000000000e+00, 7.999999996274709702e+00]
 	Q2.29:	[-4.000000000000000000e+00, 3.999999998137354851e+00]
 	Q1.30:	[-2.000000000000000000e+00, 1.999999999068677425e+00]
-	Q0.31:	[-1.000000000000000000e+00, 9.999999995343387127e-01]
+	Q0.31:	[-1.000000000000000000e+00, 9.999999995343387127e-01]</code></pre>
 
 # APIs - 16bit Q format
-  // Return the Q format with the range larger than given range
+<pre><code>  // Return the Q format with the range larger than given range
   fixed16_qformat_t fixed16_get_qformat_covering_range(double fmin, double fmax);
   // Return the Q format with the unit resolution finer than given epsilon
   fixed16_qformat_t fixed16_get_qformat_covering_resolution(double epsilon);
@@ -297,10 +293,10 @@ where S is sign bit, I is integer bit, and F is fractional bit.
   static inline fixed16_t fixed16_subtract(fixed16_t a, fixed16_t b) { fixed16_t c; c = a - b; return c; }
   fixed16_t fixed16_subtract_with_trim(fixed16_t a, fixed16_t b);
   fixed16_t fixed16_multiply(fixed16_t a, fixed16_t b, fixed16_qformat_t q);
-  fixed16_t fixed16_divide(fixed16_t a, fixed16_t b, fixed16_qformat_t q);
+  fixed16_t fixed16_divide(fixed16_t a, fixed16_t b, fixed16_qformat_t q);</code></pre>
 
 # APIs - 32bit Q format
-  // Return the Q format with the range larger than given range
+<pre><code>  // Return the Q format with the range larger than given range
   fixed32_qformat_t fixed32_get_qformat_covering_range(double fmin, double fmax);
   // Return the Q format with the unit resolution finer than given epsilon
   fixed32_qformat_t fixed32_get_qformat_covering_resolution(double epsilon);
@@ -337,7 +333,7 @@ where S is sign bit, I is integer bit, and F is fractional bit.
   static inline fixed32_t fixed32_subtract(fixed32_t a, fixed32_t b) { fixed32_t c; c = a - b; return c; }
   fixed32_t fixed32_subtract_with_trim(fixed32_t a, fixed32_t b);
   fixed32_t fixed32_multiply(fixed32_t a, fixed32_t b, fixed32_qformat_t q);
-  fixed32_t fixed32_divide(fixed32_t a, fixed32_t b, fixed32_qformat_t q);
+  fixed32_t fixed32_divide(fixed32_t a, fixed32_t b, fixed32_qformat_t q);</code></pre>
 
 # Additional feature 
 CORDIC-based 
