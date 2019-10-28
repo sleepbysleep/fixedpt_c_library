@@ -8,22 +8,22 @@ and in applications that require constant resolution.
  - from wikipedia.com
 
 # 16bit format
-  Q14.1 - "SIIIIIIIIIIIIIIF" <- -16384 < float < 16384
-  Q13.2 - "SIIIIIIIIIIIIIFF" <-  -8192 < float < 8192
-  Q12.3 - "SIIIIIIIIIIIIFFF" <-  -4096 < float < 4096
-  Q11.4 - "SIIIIIIIIIIIFFFF" <-  -2048 < float < 2048
-  Q10.5 - "SIIIIIIIIIIFFFFF" <-  -1024 < float < 1024
-  Q9.6  - "SIIIIIIIIIFFFFFF" <-   -512 < float < 512
-  Q8.7  - "SIIIIIIIIFFFFFFF" <-   -256 < float < 256
-  Q7.8  - "SIIIIIIIFFFFFFFF" <-   -128 < float < 128
-  Q6.9  - "SIIIIIIFFFFFFFFF" <-    -64 < float < 64
-  Q5.10 - "SIIIIIFFFFFFFFFF" <-    -32 < float < 32
-  Q4.11 - "SIIIIFFFFFFFFFFF" <-    -16 < float < 16
-  Q3.12 - "SIIIFFFFFFFFFFFF" <-     -8 < float < 8
-  Q2.13 - "SIIFFFFFFFFFFFFF" <-     -4 < float < 4
-  Q1.14 - "SIFFFFFFFFFFFFFF" <-     -2 < float < 2
-  Q0.15 - "SFFFFFFFFFFFFFFF" <-     -1 < float < 1
-  , where S is sign bit, I is integer bit, and F is fractional bit.
+Q14.1 - "SIIIIIIIIIIIIIIF" <- -16384 < float < 16384
+Q13.2 - "SIIIIIIIIIIIIIFF" <-  -8192 < float < 8192
+Q12.3 - "SIIIIIIIIIIIIFFF" <-  -4096 < float < 4096
+Q11.4 - "SIIIIIIIIIIIFFFF" <-  -2048 < float < 2048
+Q10.5 - "SIIIIIIIIIIFFFFF" <-  -1024 < float < 1024
+Q9.6  - "SIIIIIIIIIFFFFFF" <-   -512 < float < 512
+Q8.7  - "SIIIIIIIIFFFFFFF" <-   -256 < float < 256
+Q7.8  - "SIIIIIIIFFFFFFFF" <-   -128 < float < 128
+Q6.9  - "SIIIIIIFFFFFFFFF" <-    -64 < float < 64
+Q5.10 - "SIIIIIFFFFFFFFFF" <-    -32 < float < 32
+Q4.11 - "SIIIIFFFFFFFFFFF" <-    -16 < float < 16
+Q3.12 - "SIIIFFFFFFFFFFFF" <-     -8 < float < 8
+Q2.13 - "SIIFFFFFFFFFFFFF" <-     -4 < float < 4
+Q1.14 - "SIFFFFFFFFFFFFFF" <-     -2 < float < 2
+Q0.15 - "SFFFFFFFFFFFFFFF" <-     -1 < float < 1
+where S is sign bit, I is integer bit, and F is fractional bit.
 
   In float-typed conatiner,
   Their unit resolution are;
